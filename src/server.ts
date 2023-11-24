@@ -5,7 +5,6 @@ import mongoose from 'mongoose';
 async function server() {
   try {
     await mongoose.connect(config.database_url as string);
-    console.log('Mongoose connected');
 
     app.listen(config.port, () => {
       console.log(`Server is running on port : ${config.port}`);
