@@ -1,12 +1,16 @@
 import { Request, Response } from 'express';
 import { UserServices } from './user.service';
+import { userValidationSchema } from './user.validation';
 
 const createUser = async (req: Request, res: Response) => {
   try {
     const user = req.body;
 
+    // data validation using zod
+    const zodData = userValidationSchema.parse(user);
+
     // will call service func to send this data
-    const result = await UserServices.createUserIntoDB(user);
+    const result = await UserServices.createUserIntoDB(zodData);
 
     // send response
     res.status(201).json({
