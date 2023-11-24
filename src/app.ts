@@ -1,9 +1,13 @@
-import express from 'express';
+import express, { Application } from 'express';
+import { UserRoutes } from './app/config/modules/user/user.route';
 
-const app = express();
+const app: Application = express();
 
-app.get('/', (req, res) => {
-  res.send('Hellow ');
-});
+app.use(express.json());
+
+// api/users/create-user
+
+// application routes
+app.use('/api/users', UserRoutes);
 
 export default app;
