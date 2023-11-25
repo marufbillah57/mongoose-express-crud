@@ -1,5 +1,6 @@
 import { Schema, model } from 'mongoose';
-import { Address, FullName, IUser, Product } from './user/user.interface';
+import { Address, FullName, IUser, UserModel } from './user/user.interface';
+import { Order } from './order/order.interface';
 
 const fullNameSchema = new Schema<FullName>({
   firstName: {
@@ -28,7 +29,7 @@ const addressSchema = new Schema<Address>({
   country: { type: String, trim: true },
 });
 
-const productSchema = new Schema<Product>({
+const orderSchema = new Schema<Order>({
   productName: String,
   price: Number,
   quantity: Number,
@@ -61,7 +62,14 @@ const userSchema = new Schema<IUser>({
     type: addressSchema,
     required: true,
   },
-  orders: [productSchema],
+  orders: [orderSchema],
 });
 
-export const UserModel = model<IUser>('User', userSchema);
+// creating a custom static method
+userSchema.statics.isUserExists = async function (userId: string) {
+  const existingUser = await User.findOne({ userId });
+
+  return existingUser;
+};
+
+export const User = model<IUser, UserModel>('User', userSchema);
