@@ -1,4 +1,4 @@
-import { User } from '../user.model';
+import { User } from './user.model';
 import { IUser } from './user.interface';
 
 const createUserIntoDB = async (userData: IUser): Promise<IUser> => {
