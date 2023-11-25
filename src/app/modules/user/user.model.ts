@@ -1,4 +1,6 @@
+/* eslint-disable @typescript-eslint/no-this-alias */
 import { Schema, model } from 'mongoose';
+import bcrypt from 'bcrypt';
 import {
   IAddress,
   IFullName,
@@ -6,6 +8,7 @@ import {
   IUser,
   UserModel,
 } from './user.interface';
+import config from '../../config';
 
 const fullNameSchema = new Schema<IFullName, UserModel>({
   firstName: { type: String, required: true, trim: true },
@@ -58,10 +61,20 @@ const userSchema = new Schema<IUser>({
 });
 
 // creating a custom static method
-userSchema.statics.isUserExists = async function (userId: string) {
+userSchema.statics.isUserExists = async function (userId: number) {
   const existingUser = await User.findOne({ userId });
 
   return existingUser;
 };
+
+// hash password before save to database
+userSchema.pre('save', async function (next) {
+  const user = this;
+  user.password = await bcrypt.hash(
+    user.password,
+    Number(config.bcrypt_salt_rounds),
+  );
+  next();
+});
 
 export const User = model<IUser, UserModel>('User', userSchema);
