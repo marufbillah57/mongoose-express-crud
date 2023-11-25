@@ -76,5 +76,3 @@ export const userValidationSchema = z.object({
   ),
   address: addressValidationSchema,
 });
-
-

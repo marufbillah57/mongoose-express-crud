@@ -1,5 +1,5 @@
 import { User } from './user.model';
-import { IUser } from './user.interface';
+import { IOrder, IUser } from './user.interface';
 
 // create new user and save in database
 const createUserIntoDB = async (userData: IUser): Promise<IUser> => {
@@ -38,10 +38,28 @@ const deleteUserFromDB = async (userId: number) => {
   return await User.findOneAndDelete({ userId });
 };
 
-export const UserServices = {
+// create new order and save in user collection
+const createOrderOfUser = async (userId: number, order: IOrder) => {
+  return User.updateOne({ userId }, { $push: { orders: order } });
+};
+
+// get all orders
+const getAllOrdersOfUser = async (userId: number) => {
+  const result = await User.findOne({ userId }).select('orders -_id');
+
+  if (result?.orders?.length && result.orders.length > 0) {
+    return result;
+  } else {
+    return { description: 'No orders found!' };
+  }
+};
+
+export const userServices = {
   createUserIntoDB,
   getAllUsersFromDB,
   getSingleUserFromDB,
   updateSingleUserFromDB,
   deleteUserFromDB,
+  createOrderOfUser,
+  getAllOrdersOfUser,
 };

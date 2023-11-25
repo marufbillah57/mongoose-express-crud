@@ -35,5 +35,5 @@ export type TUserPartial = Partial<IUser>;
 
 // for creating static
 export interface UserModel extends Model<IUser> {
-  isUserExists(userId: string): Promise<IUser | null>;
+  findByUserId(userId: number): Promise<IUser | null>;
 }

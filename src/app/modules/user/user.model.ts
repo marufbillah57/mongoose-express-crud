@@ -61,10 +61,14 @@ const userSchema = new Schema<IUser>({
 });
 
 // creating a custom static method
-userSchema.statics.isUserExists = async function (userId: number) {
-  const existingUser = await User.findOne({ userId });
+// userSchema.statics.isUserExists = async function (userId: number) {
+//   const existingUser = await User.findOne({ userId });
 
-  return existingUser;
+//   return existingUser;
+// };
+
+userSchema.statics.findByUserId = function (userId: number) {
+  return this.findOne({ userId });
 };
 
 // hash password before save to database
